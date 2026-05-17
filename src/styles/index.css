@@ -1,0 +1,19 @@
+@import './fonts.css';
+@import './theme.css';
+@import './tailwind.css';
+
+/* تحسينات للأجهزة المحمولة */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  html {
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
+}

@@ -1,0 +1,10 @@
+# Placeholder - Run 'pnpm install' to generate real lockfile
+# Or use npm for now (Docker needs pnpm-lock.yaml)
+
+Note: To fix Docker build:
+1. Install pnpm globally: npm install -g pnpm
+2. pnpm install
+3. docker build .
+
+Current workaround: Dockerfile uses npm ok for build.
+

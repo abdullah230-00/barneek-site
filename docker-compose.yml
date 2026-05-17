@@ -1,0 +1,8 @@
+# docker-compose.yml
+services:
+  app:
+    build: .
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_SUPABASE_URL=https://ilcbluyhkljehkcgqfjm.supabase.co
