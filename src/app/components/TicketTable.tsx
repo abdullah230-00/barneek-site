@@ -8,8 +8,9 @@ import {
   TableRow,
 } from "./ui/table";
 import { Button } from "./ui/button";
-import { Pencil, Trash2, Copy } from "lucide-react";
+import { Pencil, Trash2, Copy, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import { useEffect, useMemo, useState } from "react";
 
 interface TicketTableProps {
   tickets: TicketPrice[];
@@ -142,6 +143,25 @@ export function TicketTable({
 }: TicketTableProps) {
   const colSpan = editable || showCopyButton ? 8 : 7;
 
+  const pageSize = 11;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(tickets.length / pageSize));
+  }, [tickets.length]);
+
+  useEffect(() => {
+    // إعادة الترقيم لبداية القائمة عند أي تغيير في البيانات
+    setCurrentPage(1);
+  }, [tickets]);
+
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+  const paginatedTickets = useMemo(() => {
+    const start = (safeCurrentPage - 1) * pageSize;
+    return tickets.slice(start, start + pageSize);
+  }, [tickets, safeCurrentPage]);
+
   if (tickets.length === 0) {
     return (
       <div className="bg-white rounded-2xl shadow-xl border-2 border-[#AD1457] p-12 text-center">
@@ -154,6 +174,7 @@ export function TicketTable({
 
   return (
     <>
+      {/* placeholder to keep fragment formatting stable */}
       {/* ─── جدول على جميع الشاشات ─── */}
       <div className="block bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-[#AD1457]">
         <div className="overflow-x-auto">
@@ -189,7 +210,7 @@ export function TicketTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {tickets.map((ticket, index) => (
+              {paginatedTickets.map((ticket, index) => (
                 <TableRow
                   key={ticket.id}
                   className={`${
@@ -255,6 +276,51 @@ export function TicketTable({
               ))}
             </TableBody>
           </Table>
+        </div>
+
+        {/* ─── Pagination ─── */}
+        <div className="px-4 py-4 flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={safeCurrentPage <= 1}
+              className="disabled:opacity-50 disabled:cursor-not-allowed bg-[#AD1457] hover:bg-[#8E1144] active:bg-[#6D0D38] text-white rounded-lg px-3 py-1.5 text-sm font-bold transition-colors"
+              aria-label="الصفحة السابقة"
+              title="السابق"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+
+            <div className="flex items-center gap-2 flex-wrap justify-center">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(page)}
+                  aria-current={page === safeCurrentPage ? "page" : undefined}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-bold border-2 transition-colors ${
+                    page === safeCurrentPage
+                      ? "bg-[#AD1457] border-[#AD1457] text-white"
+                      : "bg-white border-[#AD1457]/30 text-[#AD1457] hover:bg-pink-50"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safeCurrentPage >= totalPages}
+              className="disabled:opacity-50 disabled:cursor-not-allowed bg-[#AD1457] hover:bg-[#8E1144] active:bg-[#6D0D38] text-white rounded-lg px-3 py-1.5 text-sm font-bold transition-colors"
+              aria-label="الصفحة التالية"
+              title="التالي"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+          </div>
         </div>
       </div>
     </>
