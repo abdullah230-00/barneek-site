@@ -279,48 +279,48 @@ export function TicketTable({
         </div>
 
         {/* ─── Pagination ─── */}
-        <div className="px-4 py-4 flex flex-col items-center gap-3">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={safeCurrentPage <= 1}
-              className="disabled:opacity-50 disabled:cursor-not-allowed bg-[#AD1457] hover:bg-[#8E1144] active:bg-[#6D0D38] text-white rounded-lg px-3 py-1.5 text-sm font-bold transition-colors"
-              aria-label="الصفحة السابقة"
-              title="السابق"
-            >
-              <ChevronRight className="size-4" />
-            </button>
+        <div className="w-full flex items-center justify-center gap-3 bg-[#AD1457] p-3">
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={safeCurrentPage <= 1}
+            className="disabled:opacity-50 disabled:cursor-not-allowed text-white hover:text-white/80 active:text-white/60 transition-colors"
+            aria-label="الصفحة السابقة"
+            title="السابق"
+          >
+            <ChevronRight className="size-6" />
+          </button>
 
-            <div className="flex items-center gap-2 flex-wrap justify-center">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  type="button"
-                  onClick={() => setCurrentPage(page)}
-                  aria-current={page === safeCurrentPage ? "page" : undefined}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-bold border-2 transition-colors ${
-                    page === safeCurrentPage
-                      ? "bg-[#AD1457] border-[#AD1457] text-white"
-                      : "bg-white border-[#AD1457]/30 text-[#AD1457] hover:bg-pink-50"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
-            </div>
 
-            <button
-              type="button"
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={safeCurrentPage >= totalPages}
-              className="disabled:opacity-50 disabled:cursor-not-allowed bg-[#AD1457] hover:bg-[#8E1144] active:bg-[#6D0D38] text-white rounded-lg px-3 py-1.5 text-sm font-bold transition-colors"
-              aria-label="الصفحة التالية"
-              title="التالي"
-            >
-              <ChevronLeft className="size-4" />
-            </button>
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                type="button"
+                onClick={() => setCurrentPage(page)}
+                aria-current={page === safeCurrentPage ? "page" : undefined}
+                className={`rounded-xl px-3 py-1.5 text-sm font-bold border-2 transition-colors ${
+                  page === safeCurrentPage
+                    ? "border-white bg-white text-[#AD1457]"
+                    : "border-white/50 bg-transparent text-white hover:bg-white/20"
+                }`}
+              >
+                {page}
+              </button>
+
+            ))}
           </div>
+
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={safeCurrentPage >= totalPages}
+            className="disabled:opacity-50 disabled:cursor-not-allowed text-white hover:text-white/80 active:text-white/60 transition-colors"
+            aria-label="الصفحة التالية"
+            title="التالي"
+          >
+            <ChevronLeft className="size-6" />
+          </button>
         </div>
       </div>
     </>
